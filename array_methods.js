@@ -9,11 +9,11 @@ let cart = [
    ];
 
 // USING MAP() AND FOREACH()
-const mapFunction = cart.map(a => a.item).forEach(f => console.log(f))  ;
+// cart.map(a => a.item).forEach(f => console.log(f))  ;
 //  USING REDUCE()
-f =(total, arrayValue) => total + (arrayValue.price * arrayValue.quantity);
-const totalPrice = cart.reduce(f,0);
-console.log("The Total Price $: " + totalPrice);
+// f =(total, arrayValue) => total + (arrayValue.price * arrayValue.quantity);
+// const totalPrice = cart.reduce(f,0);
+// console.log("The Total Price $: " + totalPrice);
 // USING SORT()
-// cart.sort((a,b) => a.price - b.price).forEach(f => console.log(f.item));
-cart.sort((a, b) => a.item.localeCompare(b.item)).forEach(item => console.log(item.item));
+cart.sort((a,b) => a.price - b.price).forEach(f => console.log(f.item));
+// cart.sort((a, b) => a.item.localeCompare(b.item)).forEach(item => console.log(item.item));
