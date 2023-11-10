@@ -8,8 +8,9 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-around;
             height: 100vh;
             margin: 0;
             padding: 0;
@@ -33,7 +34,7 @@
             padding: 0;
             font-weight: 900;
             text-shadow: 0 0 2px black;
-            transition: all ease-in 200ms;
+            transition: all ease-in-out 200ms;
         }
 
         .grid {
@@ -43,10 +44,16 @@
             position: relative;
             transition: all ease-in-out 200ms;
         }
+        #score {
+            color: darkgoldenrod;
+            font-size: 6vw;
+            padding: 1em;
+        }
     </style>
 </head>
 
 <body>
+    <div id="score" class="class"></div>
     <div id="grid" class="grid"></div>
 </body>
 <script>
@@ -54,8 +61,8 @@
     const LIMIT = 8;
 
     const list = [
-        { name: "Mouse", symbol: "M", color: "brown", x: 1, y: 1 },
-        { name: "Mouse2", symbol: "2", color: "orange", x: 6, y: 1 },
+        { name: "Mouse", symbol: "M", color: "brown", x: 1, y: 1, gold: 0 },
+        { name: "Mouse2", symbol: "2", color: "orange", x: 6, y: 1, gold: 0 },
         { name: "Cheese", symbol: "C", color: "gold", x: 6, y: 6 },
     ];
 
@@ -82,54 +89,58 @@
 
     for (let y = 0; y < LIMIT; y++) {
         for (let x = 0; x < LIMIT; x++) {
-            grid.appendChild(getCell(y, x))
+            grid.appendChild(getCell(y, x));
         }
     }
 
     list.forEach(item => grid.appendChild(getItem(item)));
 
-    const m = list[0]; //FIRST ITEM e.g: Mouse 1
+    const m = list[0];
+    const m2 = list[1];
+    const c = list[2];
 
     document.addEventListener("keydown", e => {
-        // Record the current position     
-        const prevX = m.x;
-        const prevY = m.y;
 
         //MAKE DECISION AND UPDATE DATA
-        if (e.code === "ArrowRight") {
-            m.x++;
-        } else if (e.code === "ArrowLeft") {
-            m.x--;
-        } else if (e.code === "ArrowUp") {
-            m.y--;
-        } else if (e.code === "ArrowDown") {
-            m.y++;
-        }
-        // Check if the new position is within bounds, if not, revert to the previous position
-        if (m.x < 0 || m.x >= LIMIT || m.y < 0 || m.y >= LIMIT) {
-            m.x = prevX;
-            m.y = prevY;
-        }
+        if (e.code == "ArrowRight") m.x++;
+        if (e.code == "ArrowLeft") m.x--;
+        if (e.code == "ArrowUp") m.y--;
+        if (e.code == "ArrowDown") m.y++;
+
+        if (e.code == "KeyD") m2.x++;
+        if (e.code == "KeyA") m2.x--;
+        if (e.code == "KeyW") m2.y--;
+        if (e.code == "KeyS") m2.y++;
+
+
+  //COLLISION DETECTION
+        list.forEach(item1 => {
+            list.forEach(item2 => {
+                if (item1.x == item2.x && item1.y == item2.y && item1.symbol === "C") {
+                    //GIVE GOLD TO THE RIGHT MOUSE
+                    if (item2.symbol == "M") m.gold++;
+                    if (item2.symbol == "2") m2.gold++;
+                    if (item2.symbol == "M" || item2.symbol == "2") {
+                        //MOVE THE CHEESE
+                        c.x = Math.floor(Math.random() * 8);
+                        c.y = Math.floor(Math.rondom() * 8);
+                    }
+                }
+            })//INNER LOOP ITEM2
+        })//OUTER LOOP ITEM1
 
         //UPDATE DISPLAY
         m.element.style.top = `${m.y * 3}vw`;
         m.element.style.left = `${m.x * 3}vw`;
 
-        //COLLISION DETECTION
-        list.forEach(item => {
-            if (item !== m && item.x === m.x && item.y === m.y) {
-                alert("Boom");
-                // Revert to the previous position to avoid the collision
-                m.x = prevX;
-                m.y = prevY;
-                // Update the display to show the previous position
-                m.element.style.top = `${m.y * 3}vw`;
-                m.element.style.left = `${m.x * 3}vw`;
-            }
-        })
+        m2.element.style.top = `${m2.y * 3}vw`;
+        m2.element.style.left = `${m2.x * 3}vw`;
 
-    });//END KEYDOWM
+        c.element.style.top = `${c.y * 3}vw`;
+        c.element.style.left = `${c.x * 3}vw`;
 
+        score.innerText = `Play1: ${m.gold} Play2: ${m2.gold}`;
+    })
 </script>
 
 </html>
