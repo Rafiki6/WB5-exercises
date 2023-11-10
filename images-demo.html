@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <img src="#">
+    <img src="./images/Cristiano.png">
+    <img src="./images/Ronald1.png">
+</body>
+ <script>
+
+    //CONST list = document.getElementByTagName("img");
+    const list = document.querySelectorAll("img");
+    list.forEach(item => item.title = item.src);
+
+//ALTERNATE
+list.forEach(item =>{
+    parts = item.src.split("/");
+    fileonly = parts[parts.length -1];
+    item.title = fileonly;
+})
+ </script>
+</html>
